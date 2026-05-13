@@ -64,16 +64,24 @@ export class OpenAICompatibleAdapter {
     // Moonshot Kimi K2.5/K2.6：官方文档要求 temperature 等为固定值，传入自定义值会报错
     if (!kimiK2FixedParams) {
       requestBody.temperature = 0.1;
+    } else {
+      requestBody.thinking = { type: "disabled" };
     }
 
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${this.config.apiKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(requestBody)
-    });
+    let response: Response;
+    try {
+      response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.config.apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestBody),
+        signal: AbortSignal.timeout(90_000)
+      });
+    } catch (error) {
+      throw new Error(buildFetchFailureMessage(error, this.config, endpoint));
+    }
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -96,6 +104,10 @@ export class OpenAICompatibleAdapter {
     const parsed = parseStrictJson<CompareUIDesignResult>(content);
     const normalized = {
       ...parsed,
+      issues: parsed.issues.map((issue) => ({
+        ...issue,
+        severity: normalizeSeverity(issue.severity)
+      })),
       total_issues: parsed.issues.length
     };
 
@@ -105,6 +117,53 @@ export class OpenAICompatibleAdapter {
 
 function ensureTrailingSlash(value: string): string {
   return value.endsWith("/") ? value : `${value}/`;
+}
+
+function buildFetchFailureMessage(
+  error: unknown,
+  config: AIProviderConfig,
+  endpoint: URL
+): string {
+  const detail = getErrorDetail(error);
+
+  return [
+    `Failed to connect to AI provider ${config.provider} at ${endpoint.origin}.`,
+    `Model: ${config.model}.`,
+    detail ? `Underlying error: ${detail}.` : "",
+    "If this provider is unreachable from the server process, configure a reachable proxy/base URL or switch AI_MODEL_PRESET to a provider available from your network."
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
+function getErrorDetail(error: unknown): string {
+  if (!(error instanceof Error)) {
+    return "";
+  }
+
+  const cause = error.cause;
+  const causeMessage =
+    cause instanceof Error
+      ? cause.message
+      : cause && typeof cause === "object" && "message" in cause
+        ? String(cause.message)
+        : "";
+
+  return [error.message, causeMessage].filter(Boolean).join(" / ");
+}
+
+function normalizeSeverity(value: string): "严重" | "中等" | "轻微" {
+  const normalized = value.trim().toLowerCase();
+
+  if (["严重", "高", "重度", "critical", "high", "major"].includes(normalized)) {
+    return "严重";
+  }
+
+  if (["轻微", "低", "轻度", "minor", "low", "trivial"].includes(normalized)) {
+    return "轻微";
+  }
+
+  return "中等";
 }
 
 /** DeepSeek 文档说明 V4 API 为 text-only；OpenAI 兼容端不接受 user 消息里的 image_url。 */

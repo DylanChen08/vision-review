@@ -1,0 +1,185 @@
+{
+    "total_issues": 12,
+    "issues": [
+        {
+            "id": "issue-1",
+            "type": "布局",
+            "severity": "严重",
+            "element": "角色选择栏",
+            "design_value": "包含全部、汤兮兮、格格巫、玉兔四个选项，带图标头像",
+            "implementation_value": "仅显示全部、Maxvision-AI两个选项，无图标头像",
+            "bbox": {
+                "x": 40,
+                "y": 310,
+                "width": 320,
+                "height": 50
+            },
+            "annotation_text": "角色选择栏缺失多个角色选项及图标头像"
+        },
+        {
+            "id": "issue-2",
+            "type": "布局",
+            "severity": "严重",
+            "element": "日记列表内容",
+            "design_value": "三条日记记录，含图标、标题、时间、内容摘要",
+            "implementation_value": "单条聊天记录样式，无图标，标题为'午间的故事时间'",
+            "bbox": {
+                "x": 40,
+                "y": 480,
+                "width": 320,
+                "height": 200
+            },
+            "annotation_text": "日记列表内容区域实现与设计稿完全不符"
+        },
+        {
+            "id": "issue-3",
+            "type": "布局",
+            "severity": "严重",
+            "element": "搜索框",
+            "design_value": "无搜索框",
+            "implementation_value": "出现搜索框，占位文字为'搜索聊天记录...'",
+            "bbox": {
+                "x": 40,
+                "y": 420,
+                "width": 320,
+                "height": 50
+            },
+            "annotation_text": "设计稿中不存在搜索框，实现图多余添加"
+        },
+        {
+            "id": "issue-4",
+            "type": "颜色",
+            "severity": "中等",
+            "element": "当前选中日期背景",
+            "design_value": "白色圆形背景，粉色外圈描边",
+            "implementation_value": "纯粉色圆形背景，白色文字",
+            "bbox": {
+                "x": 120,
+                "y": 175,
+                "width": 60,
+                "height": 85
+            },
+            "annotation_text": "选中日期样式错误，应为白底粉圈而非粉底白字"
+        },
+        {
+            "id": "issue-5",
+            "type": "颜色",
+            "severity": "中等",
+            "element": "Tab选中指示器",
+            "design_value": "日记Tab为粉色选中，历史为灰色未选中",
+            "implementation_value": "历史Tab为粉色选中，日记为黑色未选中",
+            "bbox": {
+                "x": 60,
+                "y": 370,
+                "width": 80,
+                "height": 30
+            },
+            "annotation_text": "Tab选中状态与设计稿相反"
+        },
+        {
+            "id": "issue-6",
+            "type": "位置",
+            "severity": "中等",
+            "element": "日期选择器选中位置",
+            "design_value": "周二（3号）为选中状态",
+            "implementation_value": "周二（28号）为选中状态，但日期排列整体偏移",
+            "bbox": {
+                "x": 120,
+                "y": 150,
+                "width": 60,
+                "height": 110
+            },
+            "annotation_text": "日期选择器整体位置及选中状态需核对"
+        },
+        {
+            "id": "issue-7",
+            "type": "字体",
+            "severity": "轻微",
+            "element": "相伴天数数字",
+            "design_value": "88，粉色粗体",
+            "implementation_value": "11，粉色粗体",
+            "bbox": {
+                "x": 280,
+                "y": 100,
+                "width": 60,
+                "height": 30
+            },
+            "annotation_text": "天数数字内容不同（业务数据差异，非样式问题）"
+        },
+        {
+            "id": "issue-8",
+            "type": "布局",
+            "severity": "严重",
+            "element": "底部导航栏日记图标",
+            "design_value": "书本形状图标，粉色填充",
+            "implementation_value": "书本形状图标，粉色描边/空心样式",
+            "bbox": {
+                "x": 180,
+                "y": 580,
+                "width": 40,
+                "height": 40
+            },
+            "annotation_text": "底部导航日记图标样式应为填充而非描边"
+        },
+        {
+            "id": "issue-9",
+            "type": "颜色",
+            "severity": "轻微",
+            "element": "顶部状态栏时间",
+            "design_value": "9:41，黑色",
+            "implementation_value": "12:47，黑色",
+            "bbox": {
+                "x": 20,
+                "y": 10,
+                "width": 60,
+                "height": 20
+            },
+            "annotation_text": "状态栏时间显示不同（系统数据差异）"
+        },
+        {
+            "id": "issue-10",
+            "type": "布局",
+            "severity": "中等",
+            "element": "日期数字下方红点",
+            "design_value": "1号、2号、3号下方均有红色小圆点标记",
+            "implementation_value": "仅28号上方有一个橙色圆点，位置在数字上方而非下方",
+            "bbox": {
+                "x": 140,
+                "y": 195,
+                "width": 20,
+                "height": 20
+            },
+            "annotation_text": "日期标记点位置及数量与设计稿不符"
+        },
+        {
+            "id": "issue-11",
+            "type": "圆角",
+            "severity": "轻微",
+            "element": "角色选择标签",
+            "design_value": "圆角胶囊形状，带图标和文字",
+            "implementation_value": "圆角胶囊形状，纯文字无图标",
+            "bbox": {
+                "x": 200,
+                "y": 315,
+                "width": 180,
+                "height": 40
+            },
+            "annotation_text": "角色标签缺少图标元素"
+        },
+        {
+            "id": "issue-12",
+            "type": "布局",
+            "severity": "严重",
+            "element": "页面整体内容区域",
+            "design_value": "日记列表，含多条记录卡片",
+            "implementation_value": "聊天记录样式，单条对话卡片",
+            "bbox": {
+                "x": 20,
+                "y": 450,
+                "width": 360,
+                "height": 300
+            },
+            "annotation_text": "页面主体内容类型完全错误，应为日记列表而非聊天记录"
+        }
+    ]
+}
