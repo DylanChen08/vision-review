@@ -1,0 +1,95 @@
+{
+    "total_issues": 6,
+    "issues": [
+        {
+            "id": "issue-1",
+            "type": "颜色",
+            "severity": "严重",
+            "element": "日历选中日期（28号）",
+            "design_value": "白色背景(#FFFFFF) + 红色指示圆点 + 粉色边框",
+            "implementation_value": "粉色背景(#FF4B8D) + 白色文字",
+            "bbox": {
+                "x": 132,
+                "y": 278,
+                "width": 62,
+                "height": 62
+            },
+            "annotation_text": "选中日期背景应为白色，不是粉色"
+        },
+        {
+            "id": "issue-2",
+            "type": "布局",
+            "severity": "严重",
+            "element": "筛选标签栏",
+            "design_value": "带头像的圆角胶囊标签（汤兮兮、格格巫、玉兔）",
+            "implementation_value": "纯文字按钮（Maxvision-AI）",
+            "bbox": {
+                "x": 150,
+                "y": 365,
+                "width": 140,
+                "height": 36
+            },
+            "annotation_text": "缺失头像标签，且标签样式不符"
+        },
+        {
+            "id": "issue-3",
+            "type": "布局",
+            "severity": "严重",
+            "element": "日记内容列表",
+            "design_value": "日记卡片列表（带图标、标题、时间戳）",
+            "implementation_value": "聊天记录样式（午间的故事时间）",
+            "bbox": {
+                "x": 20,
+                "y": 520,
+                "width": 355,
+                "height": 200
+            },
+            "annotation_text": "内容区域组件样式与设计稿不符"
+        },
+        {
+            "id": "issue-4",
+            "type": "边框",
+            "severity": "中等",
+            "element": "Tab标签下划线",
+            "design_value": "无下划线，仅文字颜色变化",
+            "implementation_value": "粉色下划线",
+            "bbox": {
+                "x": 145,
+                "y": 425,
+                "width": 48,
+                "height": 3
+            },
+            "annotation_text": "不应有下划线装饰"
+        },
+        {
+            "id": "issue-5",
+            "type": "图标",
+            "severity": "中等",
+            "element": "底部导航栏日记图标",
+            "design_value": "填充样式图标（实心）",
+            "implementation_value": "线性/轮廓样式图标（空心）",
+            "bbox": {
+                "x": 183,
+                "y": 860,
+                "width": 24,
+                "height": 24
+            },
+            "annotation_text": "选中状态图标应为填充样式"
+        },
+        {
+            "id": "issue-6",
+            "type": "布局",
+            "severity": "严重",
+            "element": "搜索框",
+            "design_value": "无此元素",
+            "implementation_value": "存在搜索框（搜索聊天记录...）",
+            "bbox": {
+                "x": 18,
+                "y": 455,
+                "width": 354,
+                "height": 48
+            },
+            "annotation_text": "设计稿中无搜索框"
+        }
+    ]
+}

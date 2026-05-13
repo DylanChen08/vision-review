@@ -9,6 +9,7 @@ import { ReviewCanvas } from "@/components/review-canvas";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { UploadSlot } from "@/components/upload-slot";
 import type { UIIssue } from "@/lib/ai/types";
+import { normalizeIssueCoordinates } from "@/lib/coordinates";
 import { analysisStages } from "@/lib/design-system";
 import { exportAnnotatedPng, exportMarkdown } from "@/lib/export";
 import type { ImageAsset } from "@/lib/image";
@@ -80,10 +81,12 @@ export default function Home() {
         throw new Error(payload.error ?? "分析失败");
       }
 
+      const normalizedIssues = normalizeIssueCoordinates(payload.issues, designAsset, implementationAsset);
+
       setProgress(100);
-      setIssues(payload.issues);
+      setIssues(normalizedIssues);
       setAnalysisState("done");
-      setActiveIssueId(payload.issues[0]?.id ?? null);
+      setActiveIssueId(normalizedIssues[0]?.id ?? null);
     } catch (caught) {
       setAnalysisState("error");
       setError(caught instanceof Error ? caught.message : "分析失败");

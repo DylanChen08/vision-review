@@ -74,8 +74,10 @@ function computeTooltip(
   const height = 30;
   const targetX = boxX + boxWidth;
   const targetY = boxY + Math.min(22, boxHeight / 2);
-  const x = targetX + 18 + width > context.canvas.width ? boxX - width - 18 : targetX + 18;
-  const y = Math.max(12, Math.min(boxY - 8, context.canvas.height - height - 12));
+  const canvasWidth = context.canvas.clientWidth || context.canvas.width;
+  const canvasHeight = context.canvas.clientHeight || context.canvas.height;
+  const x = targetX + 18 + width > canvasWidth ? boxX - width - 18 : targetX + 18;
+  const y = Math.max(12, Math.min(boxY - 8, canvasHeight - height - 12));
 
   return {
     x,
