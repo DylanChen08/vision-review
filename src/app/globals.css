@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "SF Mono", "Cascadia Code", "Roboto Mono", ui-monospace, monospace;
+
+  --color-primary: 199 89% 56%;
+  --color-secondary: 155 58% 54%;
+  --color-accent: 39 96% 58%;
+  --color-danger: 3 88% 61%;
+  --color-warning: 39 96% 58%;
+  --color-success: 151 65% 47%;
+  --color-background: 220 24% 5%;
+  --color-surface: 220 20% 8%;
+  --color-surface-raised: 220 18% 11%;
+  --color-border: 220 13% 18%;
+  --color-text-primary: 220 23% 96%;
+  --color-text-secondary: 218 14% 68%;
+  --color-muted: 220 12% 43%;
+
+  --radius-card: 8px;
+  --radius-input: 7px;
+  --radius-tooltip: 6px;
+  --radius-modal: 10px;
+  --radius-panel: 8px;
+
+  --shadow-surface: 0 1px 0 hsl(0 0% 100% / 0.03), 0 16px 42px hsl(220 30% 2% / 0.22);
+  --shadow-floating: 0 8px 28px hsl(220 30% 2% / 0.38), 0 0 0 1px hsl(0 0% 100% / 0.05);
+  --shadow-overlay: 0 24px 80px hsl(220 30% 2% / 0.58);
+  --shadow-focus: 0 0 0 1px hsl(var(--color-primary) / 0.56), 0 0 0 4px hsl(var(--color-primary) / 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: hsl(var(--color-background));
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(circle at 16% 0%, hsl(199 89% 18% / 0.18), transparent 28rem),
+    linear-gradient(180deg, hsl(220 24% 6%), hsl(220 24% 4%) 52%, hsl(218 28% 3%));
+  color: hsl(var(--color-text-primary));
+  font-family: var(--font-sans);
+  letter-spacing: 0;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+::selection {
+  background: hsl(var(--color-primary) / 0.3);
+}
+
+.scan-grid {
+  background-image:
+    linear-gradient(hsl(0 0% 100% / 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(0 0% 100% / 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
