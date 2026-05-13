@@ -14,7 +14,7 @@ interface UploadSlotProps {
 
 export function UploadSlot({ label, description, asset, onChange }: UploadSlotProps) {
   return (
-    <label className="group relative flex min-h-[88px] cursor-pointer items-center gap-4 overflow-hidden rounded-panel border border-border bg-surface/72 p-4 shadow-surface transition duration-300 ease-product hover:border-primary/38 hover:bg-surface-raised/78">
+    <label className="group relative flex min-h-[76px] min-w-0 cursor-pointer items-center gap-3 overflow-hidden rounded-panel border border-border bg-surface/72 p-3 shadow-surface transition duration-300 ease-product hover:border-primary/38 hover:bg-surface-raised/78">
       <input
         type="file"
         accept="image/png,image/jpeg,image/webp"
@@ -29,7 +29,7 @@ export function UploadSlot({ label, description, asset, onChange }: UploadSlotPr
       />
       <motion.div
         whileHover={{ scale: 1.04 }}
-        className="grid h-11 w-11 shrink-0 place-items-center rounded-input border border-border bg-background/76 text-text-secondary transition group-hover:text-primary"
+        className="grid h-10 w-10 shrink-0 place-items-center rounded-input border border-border bg-background/76 text-text-secondary transition group-hover:text-primary"
       >
         <Upload size={18} />
       </motion.div>

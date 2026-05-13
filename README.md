@@ -38,21 +38,20 @@ AI_MODEL=gpt-4o
 AI_BASE_URL=https://api.openai.com/v1
 ```
 
-### DeepSeek
+### DeepSeek（当前不可用）
 
-```env
-AI_PROVIDER=deepseek
-AI_API_KEY=...
-AI_MODEL=deepseek-chat
-AI_BASE_URL=https://api.deepseek.com/v1
-```
+DeepSeek 官方说明 **V4 API 为纯文本**；`https://api.deepseek.com/v1` 的 Chat Completions **不接受** OpenAI 式的 `image_url` 图片块，因此**无法用于本项目的双图视觉走查**（会出现 `unknown variant image_url`）。若通过 OpenRouter 等第三方聚合且对方支持多模态，可改用该服务的 `AI_BASE_URL` 与对应模型名。
 
-### Moonshot / Kimi
+### Moonshot / Kimi（视觉）
+
+使用 **Kimi 视觉模型** 时 Base URL 通常为 `https://api.moonshot.cn/v1`；如果你的账号在国际站生成 Key，再按控制台文档改为对应域名。仅支持 **base64 的 `data:image/...` 图片**（本应用上传已满足）；不支持纯 HTTP 外链图。
+
+推荐多模态：`kimi-k2.5`、`kimi-k2.6`；传统 vision 预览：`moonshot-v1-8k-vision-preview` 等。
 
 ```env
 AI_PROVIDER=moonshot
-AI_API_KEY=...
-AI_MODEL=moonshot-v1-8k
+MOONSHOT_API_KEY=（在 https://platform.moonshot.ai 控制台创建，与 DeepSeek 密钥不可混用）
+AI_MODEL=kimi-k2.5
 AI_BASE_URL=https://api.moonshot.cn/v1
 ```
 
@@ -60,7 +59,7 @@ AI_BASE_URL=https://api.moonshot.cn/v1
 
 ```env
 AI_PROVIDER=doubao
-AI_API_KEY=...
+DOUBAO_API_KEY=...
 AI_MODEL=doubao-vision-pro
 AI_BASE_URL=https://ark.cn-beijing.volces.com/api/v3
 ```
@@ -69,10 +68,12 @@ AI_BASE_URL=https://ark.cn-beijing.volces.com/api/v3
 
 ```env
 AI_PROVIDER=qwen
-AI_API_KEY=...
+QWEN_API_KEY=...
 AI_MODEL=qwen-vl-plus
 AI_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
 ```
+
+`AI_API_KEY` 仍可作为通用覆盖项；如果同时设置，会优先使用 `AI_API_KEY`。
 
 ## 本地运行
 

@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { AnalysisLoader } from "@/components/analysis-loader";
 import { IssuePanel } from "@/components/issue-panel";
 import { ReviewCanvas } from "@/components/review-canvas";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { UploadSlot } from "@/components/upload-slot";
 import type { UIIssue } from "@/lib/ai/types";
 import { analysisStages } from "@/lib/design-system";
@@ -90,58 +91,68 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen px-4 py-4 text-text-primary sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-[1800px] flex-col gap-4">
-        <header className="flex flex-col gap-4 rounded-panel border border-border bg-surface/76 p-4 shadow-surface backdrop-blur-xl xl:flex-row xl:items-center xl:justify-between">
-          <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-input border border-primary/30 bg-primary/10 text-primary">
-              <Sparkles size={18} />
+    <main className="min-h-screen overflow-x-hidden px-4 py-4 text-text-primary xl:h-screen xl:overflow-hidden sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-full max-w-[1800px] flex-col gap-4">
+        <header className="shrink-0 rounded-panel border border-border bg-surface/76 p-4 shadow-surface backdrop-blur-xl">
+          <div className="grid gap-4 xl:grid-cols-[minmax(260px,360px)_minmax(0,1fr)] xl:items-center">
+            <div className="flex min-w-0 items-center justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-input border border-primary/30 bg-primary/10 text-primary">
+                  <Sparkles size={18} />
+                </div>
+                <div className="min-w-0">
+                  <h1 className="truncate text-lg font-semibold tracking-0 text-text-primary">Vision Review</h1>
+                  <p className="mt-1 truncate text-xs text-text-secondary">
+                    面向设计师的 UI 还原度一键走查工具
+                  </p>
+                </div>
+              </div>
+              <div className="xl:hidden">
+                <ThemeToggle />
+              </div>
             </div>
-            <div>
-              <h1 className="text-lg font-semibold tracking-0 text-text-primary">Vision Review</h1>
-              <p className="mt-1 text-xs text-text-secondary">
-                面向设计师的 UI 还原度一键走查工具
-              </p>
-            </div>
-          </div>
 
-          <div className="grid gap-3 md:grid-cols-[minmax(240px,1fr)_minmax(240px,1fr)_auto] xl:min-w-[860px]">
-            <UploadSlot
-              label="上传设计稿"
-              description="PNG / JPG / WebP，建议与实现图同尺寸"
-              asset={designAsset}
-              onChange={(asset) => {
-                setDesignAsset(asset);
-                setIssues([]);
-                setAnalysisState("idle");
-              }}
-            />
-            <UploadSlot
-              label="上传实现图"
-              description="AI 标注会绘制在这张图上"
-              asset={implementationAsset}
-              onChange={(asset) => {
-                setImplementationAsset(asset);
-                setIssues([]);
-                setAnalysisState("idle");
-              }}
-            />
-            <motion.button
-              type="button"
-              whileTap={{ scale: canAnalyze ? 0.98 : 1 }}
-              disabled={!canAnalyze}
-              onClick={runAnalysis}
-              className="flex min-h-[88px] items-center justify-center gap-2 rounded-panel border border-primary/35 bg-primary px-5 text-sm font-semibold text-background shadow-[0_0_36px_hsl(var(--color-primary)/0.18)] transition duration-200 ease-product hover:bg-primary/92 disabled:cursor-not-allowed disabled:border-border disabled:bg-muted/20 disabled:text-muted"
-            >
-              <Play size={16} />
-              一键走查
-            </motion.button>
+            <div className="grid min-w-0 gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_144px_auto]">
+              <UploadSlot
+                label="上传设计稿"
+                description="PNG / JPG / WebP，建议与实现图同尺寸"
+                asset={designAsset}
+                onChange={(asset) => {
+                  setDesignAsset(asset);
+                  setIssues([]);
+                  setAnalysisState("idle");
+                }}
+              />
+              <UploadSlot
+                label="上传实现图"
+                description="AI 标注会绘制在这张图上"
+                asset={implementationAsset}
+                onChange={(asset) => {
+                  setImplementationAsset(asset);
+                  setIssues([]);
+                  setAnalysisState("idle");
+                }}
+              />
+              <motion.button
+                type="button"
+                whileTap={{ scale: canAnalyze ? 0.98 : 1 }}
+                disabled={!canAnalyze}
+                onClick={runAnalysis}
+                className="flex min-h-[76px] items-center justify-center gap-2 rounded-panel border border-primary/35 bg-primary px-5 text-sm font-semibold text-background shadow-[0_0_36px_hsl(var(--color-primary)/0.18)] transition duration-200 ease-product hover:bg-primary/92 disabled:cursor-not-allowed disabled:border-border disabled:bg-muted/20 disabled:text-muted"
+              >
+                <Play size={16} />
+                一键走查
+              </motion.button>
+              <div className="hidden min-h-[76px] items-center justify-center xl:flex">
+                <ThemeToggle />
+              </div>
+            </div>
           </div>
         </header>
 
-        <section className="grid gap-4 xl:grid-cols-[300px_minmax(0,1fr)_360px]">
-          <aside className="grid content-start gap-4">
-            <div className="rounded-panel border border-border bg-surface/76 p-4 shadow-surface">
+        <section className="grid min-h-0 flex-1 gap-4 xl:grid-cols-[300px_minmax(0,1fr)_360px]">
+          <aside className="grid min-w-0 content-start gap-4 overflow-hidden xl:min-h-0 xl:overflow-auto">
+            <div className="min-w-0 rounded-panel border border-border bg-surface/76 p-4 shadow-surface">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-semibold text-text-primary">输入校验</h2>
                 <Settings2 size={15} className="text-muted" />
@@ -153,7 +164,7 @@ export default function Home() {
                 <MetaRow label="导出格式" value="PNG / Markdown" />
               </div>
               {error ? (
-                <div className="mt-4 rounded-input border border-danger/28 bg-danger/10 p-3 text-xs leading-5 text-danger">
+                <div className="mt-4 break-words rounded-input border border-danger/28 bg-danger/10 p-3 text-xs leading-5 text-danger">
                   {error}
                 </div>
               ) : null}
@@ -162,8 +173,8 @@ export default function Home() {
             <PreviewPanel title="设计稿" asset={designAsset} />
           </aside>
 
-          <section className="relative min-h-[520px]">
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+          <section className="relative flex min-h-[520px] min-w-0 flex-col xl:min-h-0">
+            <div className="mb-3 flex shrink-0 flex-wrap items-center justify-between gap-3">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Review Canvas</p>
                 <h2 className="mt-1 text-xl font-semibold text-text-primary">实现图标注画布</h2>
@@ -193,13 +204,15 @@ export default function Home() {
                 </button>
               </div>
             </div>
-            <ReviewCanvas
-              implementation={implementationAsset}
-              issues={issues}
-              activeIssueId={activeIssueId}
-              onActiveIssueChange={setActiveIssueId}
-            />
-            {analysisState === "analyzing" ? <AnalysisLoader progress={progress} stageIndex={stageIndex} /> : null}
+            <div className="relative min-h-0 flex-1">
+              <ReviewCanvas
+                implementation={implementationAsset}
+                issues={issues}
+                activeIssueId={activeIssueId}
+                onActiveIssueChange={setActiveIssueId}
+              />
+              {analysisState === "analyzing" ? <AnalysisLoader progress={progress} stageIndex={stageIndex} /> : null}
+            </div>
           </section>
 
           <IssuePanel
@@ -219,9 +232,9 @@ export default function Home() {
 
 function MetaRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-border/70 pb-2 last:border-0 last:pb-0">
-      <span className="text-text-secondary">{label}</span>
-      <span className="truncate text-right font-mono text-text-primary">{value}</span>
+    <div className="flex min-w-0 items-center justify-between gap-3 border-b border-border/70 pb-2 last:border-0 last:pb-0">
+      <span className="shrink-0 text-text-secondary">{label}</span>
+      <span className="min-w-0 truncate text-right font-mono text-text-primary">{value}</span>
     </div>
   );
 }

@@ -71,7 +71,7 @@ export function ReviewCanvas({
 
   if (!implementation) {
     return (
-      <div className="flex h-full min-h-[460px] items-center justify-center rounded-panel border border-dashed border-border bg-surface/45">
+      <div className="flex h-full min-h-[460px] items-center justify-center rounded-panel border border-dashed border-border bg-surface/45 xl:min-h-0">
         <div className="text-center">
           <p className="text-sm font-medium text-text-primary">等待实现图</p>
           <p className="mt-2 text-xs text-text-secondary">上传后将在这里显示可标注画布</p>
@@ -81,14 +81,14 @@ export function ReviewCanvas({
   }
 
   return (
-    <div className="relative flex h-full min-h-[460px] items-center justify-center overflow-auto rounded-panel border border-border bg-[#05070b] p-5 shadow-surface">
+    <div className="relative flex h-full min-h-[460px] min-w-0 items-center justify-center overflow-auto rounded-panel border border-border bg-background p-5 shadow-surface xl:min-h-0">
       <div className="relative max-h-full max-w-full">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={imageRef}
           src={implementation.src}
           alt="前端实现图"
-          className="block max-h-[calc(100vh-260px)] max-w-full rounded-input object-contain"
+          className="block max-h-[calc(100vh-260px)] max-w-full rounded-input object-contain xl:max-h-full"
           onLoad={syncMetrics}
         />
         <canvas
