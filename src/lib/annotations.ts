@@ -1,11 +1,11 @@
 import type { UIIssue } from "@/lib/ai";
+import type { ImageRenderRect } from "@/lib/coordinates";
+import { normalizedBoxToRenderBox } from "@/lib/coordinates";
 import { severityMeta } from "@/lib/design-system";
 
 interface DrawOptions {
   activeIssueId?: string | null;
-  scale: number;
-  offsetX: number;
-  offsetY: number;
+  imageRenderRect: ImageRenderRect;
 }
 
 export function drawAnnotations(
@@ -13,7 +13,7 @@ export function drawAnnotations(
   issues: UIIssue[],
   options: DrawOptions
 ) {
-  const { activeIssueId, offsetX, offsetY, scale } = options;
+  const { activeIssueId, imageRenderRect } = options;
   context.save();
   context.lineJoin = "round";
   context.font = "500 12px Inter, system-ui, sans-serif";
@@ -21,10 +21,7 @@ export function drawAnnotations(
   issues.forEach((issue, index) => {
     const isActive = issue.id === activeIssueId;
     const color = isActive ? "#ff6b66" : severityMeta[issue.severity].marker;
-    const x = offsetX + issue.bbox.x * scale;
-    const y = offsetY + issue.bbox.y * scale;
-    const width = issue.bbox.width * scale;
-    const height = issue.bbox.height * scale;
+    const { left: x, top: y, width, height } = normalizedBoxToRenderBox(issue.bbox, imageRenderRect);
     const label = `${index + 1}. ${issue.annotation_text}`;
     const tooltip = computeTooltip(context, label, x, y, width, height);
 
@@ -48,10 +45,10 @@ export function hitTestIssue(
 ): UIIssue | null {
   for (let index = issues.length - 1; index >= 0; index -= 1) {
     const issue = issues[index];
-    const x = options.offsetX + issue.bbox.x * options.scale;
-    const y = options.offsetY + issue.bbox.y * options.scale;
-    const width = issue.bbox.width * options.scale;
-    const height = issue.bbox.height * options.scale;
+    const { left: x, top: y, width, height } = normalizedBoxToRenderBox(
+      issue.bbox,
+      options.imageRenderRect
+    );
 
     if (point.x >= x && point.x <= x + width && point.y >= y && point.y <= y + height) {
       return issue;

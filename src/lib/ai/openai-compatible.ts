@@ -1,4 +1,4 @@
-import { compareResultSchema } from "@/lib/ai/schema";
+import { compareResultSchema, modelCompareResultSchema } from "@/lib/ai/schema";
 import type {
   AIProviderConfig,
   CompareUIDesignParams,
@@ -6,6 +6,7 @@ import type {
 } from "@/lib/ai/types";
 import { parseStrictJson } from "@/lib/ai/json";
 import { UI_COMPARE_SYSTEM_PROMPT, UI_COMPARE_USER_PROMPT } from "@/lib/ai/prompts";
+import { normalizePixelBox } from "@/lib/coordinates";
 
 interface ChatCompletionResponse {
   choices?: Array<{
@@ -101,18 +102,46 @@ export class OpenAICompatibleAdapter {
       throw new Error("AI provider returned an empty response.");
     }
 
-    const parsed = parseStrictJson<CompareUIDesignResult>(content);
-    const normalized = {
-      ...parsed,
-      issues: parsed.issues.map((issue) => ({
+    const parsed = modelCompareResultSchema.parse(parseStrictJson<unknown>(content));
+    const normalizedIssues = parsed.issues.map((issue) => {
+      const bbox = normalizePixelBox(issue.bbox, {
+        width: params.imageMeta.modelInputWidth,
+        height: params.imageMeta.modelInputHeight
+      });
+
+      if (isOutOfBounds(issue.bbox, params.imageMeta.modelInputWidth, params.imageMeta.modelInputHeight)) {
+        console.warn("[VisionReview] invalid bbox", {
+          issueId: issue.id,
+          rawBox: issue.bbox,
+          normalizedBox: bbox,
+          imageMeta: params.imageMeta
+        });
+      }
+
+      return {
         ...issue,
-        severity: normalizeSeverity(issue.severity)
-      })),
+        severity: normalizeSeverity(issue.severity),
+        raw_bbox: issue.bbox,
+        bbox
+      };
+    });
+
+    const normalized: CompareUIDesignResult = {
+      imageMeta: params.imageMeta,
+      issues: normalizedIssues,
       total_issues: parsed.issues.length
     };
 
     return compareResultSchema.parse(normalized);
   }
+}
+
+function isOutOfBounds(
+  box: { x: number; y: number; width: number; height: number },
+  width: number,
+  height: number
+) {
+  return box.x < 0 || box.y < 0 || box.x + box.width > width || box.y + box.height > height;
 }
 
 function ensureTrailingSlash(value: string): string {

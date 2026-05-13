@@ -15,9 +15,12 @@ export async function exportAnnotatedPng(imageSrc: string, issues: UIIssue[], fi
   context.drawImage(image, 0, 0);
   drawAnnotations(context, issues, {
     activeIssueId: null,
-    offsetX: 0,
-    offsetY: 0,
-    scale: 1
+    imageRenderRect: {
+      left: 0,
+      top: 0,
+      width: image.naturalWidth,
+      height: image.naturalHeight
+    }
   });
 
   const url = canvas.toDataURL("image/png");
@@ -37,7 +40,7 @@ export function generateMarkdownChecklist(issues: UIIssue[]): string {
   const lines = [
     "# UI 还原度走查修复清单",
     "",
-    `共发现 ${issues.length} 个问题。坐标基于前端实现图。`,
+    `共发现 ${issues.length} 个问题。坐标为基于前端实现图的归一化比例。`,
     ""
   ];
 
@@ -56,7 +59,7 @@ export function generateMarkdownChecklist(issues: UIIssue[]): string {
         `   - 问题：${issue.annotation_text}`,
         `   - 设计值：${issue.design_value}`,
         `   - 实现值：${issue.implementation_value}`,
-        `   - 坐标：x ${Math.round(issue.bbox.x)}, y ${Math.round(issue.bbox.y)}, w ${Math.round(issue.bbox.width)}, h ${Math.round(issue.bbox.height)}`,
+        `   - 坐标：x ${issue.bbox.x.toFixed(4)}, y ${issue.bbox.y.toFixed(4)}, w ${issue.bbox.width.toFixed(4)}, h ${issue.bbox.height.toFixed(4)}`,
         `   - 修复建议：将实现侧 ${issue.element} 的${issue.type}调整为设计稿值，并复核相邻间距与状态样式。`,
         ""
       );

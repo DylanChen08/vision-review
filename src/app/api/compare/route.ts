@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { compareUIDesign } from "@/lib/ai";
+import { getImageDimensionsFromDataUrl } from "@/lib/image";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -13,7 +14,17 @@ const requestSchema = z.object({
 export async function POST(request: Request) {
   try {
     const body = requestSchema.parse(await request.json());
-    const result = await compareUIDesign(body);
+    const implementationSize = getImageDimensionsFromDataUrl(body.implementationImage);
+    const result = await compareUIDesign({
+      ...body,
+      imageMeta: {
+        originalWidth: implementationSize.width,
+        originalHeight: implementationSize.height,
+        modelInputWidth: implementationSize.width,
+        modelInputHeight: implementationSize.height,
+        coordinateType: "normalized"
+      }
+    });
 
     return NextResponse.json(result);
   } catch (error) {

@@ -8,8 +8,7 @@ import { IssuePanel } from "@/components/issue-panel";
 import { ReviewCanvas } from "@/components/review-canvas";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { UploadSlot } from "@/components/upload-slot";
-import type { UIIssue } from "@/lib/ai/types";
-import { normalizeIssueCoordinates } from "@/lib/coordinates";
+import type { CompareImageMeta, CompareUIDesignResult, UIIssue } from "@/lib/ai/types";
 import { analysisStages } from "@/lib/design-system";
 import { exportAnnotatedPng, exportMarkdown } from "@/lib/export";
 import type { ImageAsset } from "@/lib/image";
@@ -20,11 +19,13 @@ export default function Home() {
   const [designAsset, setDesignAsset] = useState<ImageAsset | null>(null);
   const [implementationAsset, setImplementationAsset] = useState<ImageAsset | null>(null);
   const [issues, setIssues] = useState<UIIssue[]>([]);
+  const [imageMeta, setImageMeta] = useState<CompareImageMeta | null>(null);
   const [activeIssueId, setActiveIssueId] = useState<string | null>(null);
   const [analysisState, setAnalysisState] = useState<AnalysisState>("idle");
   const [progress, setProgress] = useState(0);
   const [stageIndex, setStageIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [coordinateDebugEnabled, setCoordinateDebugEnabled] = useState(false);
 
   const canAnalyze = Boolean(designAsset && implementationAsset && analysisState !== "analyzing");
   const dimensionState = useMemo(() => {
@@ -76,17 +77,16 @@ export default function Home() {
         })
       });
 
-      const payload = await response.json();
+      const payload = (await response.json()) as CompareUIDesignResult & { error?: string };
       if (!response.ok) {
         throw new Error(payload.error ?? "分析失败");
       }
 
-      const normalizedIssues = normalizeIssueCoordinates(payload.issues, designAsset, implementationAsset);
-
       setProgress(100);
-      setIssues(normalizedIssues);
+      setIssues(payload.issues);
+      setImageMeta(payload.imageMeta);
       setAnalysisState("done");
-      setActiveIssueId(normalizedIssues[0]?.id ?? null);
+      setActiveIssueId(payload.issues[0]?.id ?? null);
     } catch (caught) {
       setAnalysisState("error");
       setError(caught instanceof Error ? caught.message : "分析失败");
@@ -123,6 +123,7 @@ export default function Home() {
                 onChange={(asset) => {
                   setDesignAsset(asset);
                   setIssues([]);
+                  setImageMeta(null);
                   setAnalysisState("idle");
                 }}
               />
@@ -133,6 +134,7 @@ export default function Home() {
                 onChange={(asset) => {
                   setImplementationAsset(asset);
                   setIssues([]);
+                  setImageMeta(null);
                   setAnalysisState("idle");
                 }}
               />
@@ -165,6 +167,11 @@ export default function Home() {
                 <MetaRow label="Provider" value="ai.config.ts" />
                 <MetaRow label="标注层" value="Canvas" />
                 <MetaRow label="导出格式" value="PNG / Markdown" />
+                <ToggleRow
+                  label="坐标调试"
+                  checked={coordinateDebugEnabled}
+                  onChange={setCoordinateDebugEnabled}
+                />
               </div>
               {error ? (
                 <div className="mt-4 break-words rounded-input border border-danger/28 bg-danger/10 p-3 text-xs leading-5 text-danger">
@@ -211,6 +218,8 @@ export default function Home() {
               <ReviewCanvas
                 implementation={implementationAsset}
                 issues={issues}
+                imageMeta={imageMeta}
+                showCoordinateDebug={coordinateDebugEnabled}
                 activeIssueId={activeIssueId}
                 onActiveIssueChange={setActiveIssueId}
               />
@@ -239,6 +248,28 @@ function MetaRow({ label, value }: { label: string; value: string }) {
       <span className="shrink-0 text-text-secondary">{label}</span>
       <span className="min-w-0 truncate text-right font-mono text-text-primary">{value}</span>
     </div>
+  );
+}
+
+function ToggleRow({
+  label,
+  checked,
+  onChange
+}: {
+  label: string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+}) {
+  return (
+    <label className="flex min-w-0 cursor-pointer items-center justify-between gap-3 border-b border-border/70 pb-2 last:border-0 last:pb-0">
+      <span className="shrink-0 text-text-secondary">{label}</span>
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(event) => onChange(event.currentTarget.checked)}
+        className="h-4 w-4 accent-primary"
+      />
+    </label>
   );
 }
 

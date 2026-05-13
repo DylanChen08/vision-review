@@ -9,7 +9,7 @@ export async function compareUIDesign(
   params: CompareUIDesignParams
 ): Promise<CompareUIDesignResult> {
   if (process.env.AI_ENABLE_MOCK === "true") {
-    return createMockCompareResult();
+    return createMockCompareResult(params.imageMeta);
   }
 
   return adapter.compareUIDesign(params);

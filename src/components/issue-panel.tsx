@@ -104,7 +104,7 @@ export function IssuePanel({ issues, activeIssueId, onSelect, onDelete }: IssueP
                         </div>
                         <div className="mt-3 flex items-center justify-between border-t border-border/70 pt-2">
                           <span className="font-mono text-[11px] text-muted">
-                            x{Math.round(issue.bbox.x)} y{Math.round(issue.bbox.y)}
+                            x{issue.bbox.x.toFixed(3)} y{issue.bbox.y.toFixed(3)}
                           </span>
                           <span
                             role="button"
